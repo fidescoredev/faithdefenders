@@ -714,7 +714,160 @@ class Elite extends Enemy {
             this.y+=Math.sin(ang)*14; 
         } 
     }
-    render(ctx) { ctx.save(); ctx.translate(this.x, this.y); const legAngle = Math.sin(this.t * 0.02) * 0.4; const armAngle = Math.sin(this.t * 0.02) * -0.3; const bodyW = this.r * 1.3; const bodyH = this.r * 1.6; const headH = this.r * 0.8; ctx.fillStyle = '#212529'; ctx.save(); ctx.translate(-bodyW*0.2, bodyH*0.5); ctx.rotate(legAngle); ctx.fillRect(-4, 0, 8, this.r * 1.2); ctx.restore(); ctx.save(); ctx.translate(bodyW*0.2, bodyH*0.5); ctx.rotate(-legAngle); ctx.fillRect(-4, 0, 8, this.r * 1.2); ctx.restore(); ctx.fillStyle = '#491d31'; ctx.beginPath(); ctx.moveTo(-bodyW*0.6, -bodyH*0.6); ctx.lineTo(bodyW*0.6, -bodyH*0.6); ctx.lineTo(bodyW*0.4, bodyH*0.6); ctx.lineTo(-bodyW*0.4, bodyH*0.6); ctx.closePath(); ctx.fill(); ctx.fillStyle = '#340b1c'; ctx.save(); ctx.translate(-bodyW*0.5, -bodyH*0.3); ctx.rotate(armAngle); ctx.fillRect(-3, 0, 6, this.r); ctx.restore(); ctx.save(); ctx.translate(bodyW*0.5, -bodyH*0.3); ctx.rotate(-armAngle); ctx.fillRect(-3, 0, 6, this.r); ctx.restore(); ctx.fillStyle = '#343a40'; ctx.beginPath(); ctx.moveTo(0, -bodyH*0.5 - headH); ctx.lineTo(headH*0.5, -bodyH*0.5); ctx.lineTo(-headH*0.5, -bodyH*0.5); ctx.closePath(); ctx.fill(); ctx.fillStyle = '#ff4d6d'; ctx.fillRect(-this.r * 0.3, -bodyH*0.5 - headH*0.4, this.r * 0.6, 4); ctx.restore(); }
+                render(ctx) { 
+
+              ctx.save()
+              ctx.translate(this.x, this.y)
+
+              const animParams_dragonoide = {"walkSpeed":0.5,"walkAmpLeg":0.4,"walkAmpArm":0.3,"wingAmp":0.26,"wingSpeed":1,"idleBob":0.8,"mirrorStep":true};
+const phase = (S.time / 240) * (animParams_dragonoide.walkSpeed || 1) * Math.PI * 2;
+const legA = Math.sin(phase) * (animParams_dragonoide.walkAmpLeg || 0);
+const armA = Math.sin(phase) * -(animParams_dragonoide.walkAmpArm || 0);
+const bob = Math.sin(phase) * (animParams_dragonoide.idleBob || 0) * 0.5;
+ctx.translate(0, bob);
+
+            // Comandos 'ctx' para o sprite 'dragonoide' (Estático)
+// Cole este código dentro de uma função de renderização onde 'ctx' está disponível.
+// Você precisará envolver isso com seus próprios ctx.save(), ctx.translate(x, y) e ctx.restore().
+ctx.save();
+  ctx.translate(0, 0);
+  ctx.rotate(0);
+  ctx.scale(1, 1);
+
+  // --- Cauda ---
+  ctx.save();
+    ctx.strokeStyle = '#5b3a29';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(-3, 22);
+    ctx.quadraticCurveTo(-18, 16, -10, 26);
+    ctx.stroke();
+    ctx.fillStyle = '#5b3a29';
+    ctx.beginPath();
+    ctx.moveTo(-10, 26);
+    ctx.lineTo(-14, 24);
+    ctx.lineTo(-12, 30);
+    ctx.closePath();
+    ctx.fill();
+  ctx.restore();
+
+  // --- Pernas ---
+  ctx.fillStyle = '#3f1d0b';
+  ctx.save();
+    ctx.translate(-4, 12);
+    ctx.rotate(legA);
+    ctx.fillRect(-2.5, 0, 5, 18);
+  ctx.restore();
+  ctx.save();
+    ctx.translate(4, 12);
+    ctx.rotate(-legA);
+    ctx.fillRect(-2.5, 0, 5, 18);
+  ctx.restore();
+
+  // --- Braços e Itens ---
+  ctx.fillStyle = '#3f1d0b';
+  ctx.save();
+    ctx.translate(-9, 0);
+    ctx.rotate(armA);
+    ctx.fillRect(-2.5, 0, 5, 13);
+  ctx.restore();
+  ctx.save();
+    ctx.translate(9, 0);
+    ctx.rotate(-armA);
+    ctx.fillRect(-2.5, 0, 5, 13);
+  ctx.restore();
+
+  // --- Tronco e Manto ---
+  ctx.fillStyle = '#3f1d0b';
+  ctx.fillRect(-8, 2, 16, 20);
+
+  // --- Ombreiras ---
+  ctx.save();
+    ctx.fillStyle = '#1f0a05';
+    ctx.beginPath();
+    ctx.ellipse(-8, 0, 6, 4, 0, 0, 6.283185307179586);
+    ctx.fill();
+    ctx.globalAlpha = 0.7;
+    ctx.beginPath();
+    ctx.ellipse(-10, 2, 5, 3, 0, 0, 6.283185307179586);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.beginPath();
+    ctx.ellipse(8, 0, 6, 4, 0, 0, 6.283185307179586);
+    ctx.fill();
+    ctx.globalAlpha = 0.7;
+    ctx.beginPath();
+    ctx.ellipse(10, 2, 5, 3, 0, 0, 6.283185307179586);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  ctx.restore();
+  ctx.fillStyle = '#1f0a05';
+  ctx.beginPath();
+  ctx.moveTo(-8, 2);
+  ctx.lineTo(0, -7);
+  ctx.lineTo(8, 2);
+  ctx.lineTo(8, 20);
+  ctx.lineTo(-8, 20);
+  ctx.closePath();
+  ctx.fill();
+
+  // --- Cabeça e Acessórios ---
+  ctx.fillStyle = '#9b1c1c';
+  ctx.beginPath();
+  ctx.arc(0, -8, 9, 0, 6.283185307179586);
+  ctx.fill();
+
+  // --- Chifres ---
+  ctx.fillStyle = '#5b3a29';
+  ctx.beginPath();
+  ctx.moveTo(-4, -15);
+  ctx.lineTo(-10, -23);
+  ctx.lineTo(1, -19);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#1a0e0a';
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(4, -15);
+  ctx.lineTo(10, -23);
+  ctx.lineTo(-1, -19);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = '#1a0e0a';
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+
+  // --- Olhos Brilhantes ---
+  ctx.save();
+    const grad1 = ctx.createRadialGradient(-2, -7, 0, -2, -7, 5);
+    grad1.addColorStop(0, '#fde68a');
+    grad1.addColorStop(1, 'rgba(255,255,255,0)');
+    const grad2 = ctx.createRadialGradient(2, -7, 0, 2, -7, 5);
+    grad2.addColorStop(0, '#fde68a');
+    grad2.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = grad1;
+    ctx.beginPath();
+    ctx.ellipse(-2, -7, 5, 5, 0, 0, 6.283185307179586);
+    ctx.fill();
+    ctx.fillStyle = grad2;
+    ctx.beginPath();
+    ctx.ellipse(2, -7, 5, 5, 0, 0, 6.283185307179586);
+    ctx.fill();
+  ctx.restore();
+  ctx.fillStyle = '#fde68a';
+  ctx.fillRect(-3, -8, 2, 3);
+  ctx.fillRect(1, -8, 2, 3);
+
+  // --- Pés ---
+ctx.restore();
+
+ctx.restore();
+
+
+            }
+
 }
 
 let state = {};
